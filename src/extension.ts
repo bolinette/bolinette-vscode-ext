@@ -1,8 +1,10 @@
 import * as vscode from "vscode";
-import BolinetteChecker from "./BolinetteChecker";
+import BolinetteChecker from "./utils/BolinetteChecker";
+import PythonCodeRunner from "./utils/PythonCodeRunner";
 
 export async function activate(context: vscode.ExtensionContext) {
-  const isBolinetteApp = await new BolinetteChecker().isBolinetteApp();
+  PythonCodeRunner.init(context);
+  const isBolinetteApp = await BolinetteChecker.isBolinetteApp(context);
   console.log(`isBolinetteApp: ${isBolinetteApp}`);
 }
 
