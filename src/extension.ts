@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import BolinetteChecker from "./utils/BolinetteChecker";
-import PythonCodeRunner from "./utils/PythonCodeRunner";
+import PythonCodeRunner from "./utils/AstGenerator";
 
 export async function activate(context: vscode.ExtensionContext) {
   PythonCodeRunner.init(context);

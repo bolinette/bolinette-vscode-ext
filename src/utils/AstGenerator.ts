@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import * as vscode from "vscode";
 
-export default abstract class PythonCodeRunner {
+export default abstract class AstGenerator {
   private static context: vscode.ExtensionContext;
 
   static init(context: vscode.ExtensionContext): void {
@@ -9,7 +9,7 @@ export default abstract class PythonCodeRunner {
   }
 
   static async runCode(codeAsString: string): Promise<string> {
-    const pythonParserPath = PythonCodeRunner.context.asAbsolutePath(
+    const pythonParserPath = AstGenerator.context.asAbsolutePath(
       "python-ast-parser.py"
     );
     const pyProg = await spawn("python", [pythonParserPath, codeAsString]);
