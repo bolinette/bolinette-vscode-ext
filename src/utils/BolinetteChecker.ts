@@ -4,7 +4,7 @@ import FileReader from "./FileReader";
 import PythonCodeRunner from "./PythonCodeRunner";
 
 export default abstract class BolinetteChecker {
-  static async isBolinetteApp(context: vscode.ExtensionContext) {
+  static async isBolinetteApp() {
     const matchingFiles: vscode.Uri[] = await vscode.workspace.findFiles(
       "app.py"
     );
