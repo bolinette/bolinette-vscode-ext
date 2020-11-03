@@ -8,14 +8,17 @@ export default abstract class AstGenerator {
     this.context = context;
   }
 
-  static async runCode(codeAsString: string): Promise<string> {
+  static async parseCode(codeAsString: string): Promise<any> {
     const pythonParserPath = AstGenerator.context.asAbsolutePath(
       "python-ast-parser.py"
     );
     const pyProg = await spawn("python", [pythonParserPath, codeAsString]);
     return new Promise((resolve, reject) => {
       pyProg.stdout.on("data", (data) => {
-        resolve(Buffer.from(data).toString("utf-8"));
+        const astAsString = Buffer.from(data)
+          .toString("utf-8")
+          .replace(/ast_type/g, "type");
+        resolve(JSON.parse(astAsString));
       });
     });
   }
