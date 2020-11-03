@@ -8,7 +8,29 @@ export default class BolinetteParser {
   }
 
   async run() {
-    const services: string[] = await this.annotationParser.parseServices();
-    console.log(`Services: ${services.join(", ")}`);
+    [
+      {
+        folderName: "controllers",
+        annotationName: "controller",
+      },
+      {
+        folderName: "models",
+        annotationName: "model",
+      },
+      {
+        folderName: "services",
+        annotationName: "service",
+      },
+      {
+        folderName: "mixins",
+        annotationName: "mixin",
+      },
+    ].map(async (annotation) => {
+      const services = await this.annotationParser.parse(
+        annotation.folderName,
+        annotation.annotationName
+      );
+      console.log(services);
+    });
   }
 }
