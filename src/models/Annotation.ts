@@ -1,11 +1,11 @@
-import AnnotationParameter from "./AnnotationParameter";
-
 export default class Annotation {
-  private name: string;
-  private annotationParameters: AnnotationParameter[];
+  private ast: any;
 
-  constructor(name: string, annotationParameters: AnnotationParameter[]) {
-    this.name = name;
-    this.annotationParameters = annotationParameters;
+  constructor(ast: any) {
+    this.ast = ast;
+  }
+
+  getParameters() {
+    return [...this.ast.args, ...this.ast.keywords];
   }
 }
