@@ -1,40 +1,23 @@
-import { timeStamp } from "console";
-import Annotation from "../models/Annotation";
-import AnnotationParser from "./AnnotationsParser";
+import { Uri } from "vscode";
+import FileParserFactory from "../models/FileParserFactory";
+import Project from "../models/Project";
+import ProjectFile from "../models/ProjectFile";
+import FilesUtil from "../utils/FilesUtil";
 
 export default class BolinetteParser {
-  private annotationParser: AnnotationParser;
-  private annotations: Annotation[];
-
-  constructor() {
-    this.annotationParser = new AnnotationParser();
-    this.annotations = [];
-  }
-
   async run() {
-    const annotationPromises = [
-      {
-        folder: "controllers",
-        annotation: "controller",
-      },
-      {
-        folder: "models",
-        annotation: "model",
-      },
-      {
-        folder: "services",
-        annotation: "service",
-      },
-      {
-        folder: "mixins",
-        annotation: "mixin",
-      },
-    ].map(async ({ folder, annotation }) => {
-      const annotations = await this.annotationParser.parse(folder, annotation);
-      return { folder, annotations };
-    });
+    const projectFiles = [];
+    for (const folder of ["controllers", "mixins", "models", "services"]) {
+      const fileUris: Uri[] = await FilesUtil.listFilesInFolderRec(folder);
+      for (const fileUri of fileUris) {
+        const parser = FileParserFactory.getParser(folder);
+        const projectFile = new ProjectFile(fileUri.path, parser);
+        await projectFile.updateAst();
 
-    const annotations = await Promise.all(annotationPromises);
-    console.log(annotations);
+        projectFiles.push(projectFile);
+      }
+    }
+    const project = new Project(projectFiles);
+    console.log(project);
   }
 }

@@ -8,7 +8,7 @@ export default abstract class FilesUtil {
     return Buffer.from(fileContentBuffer).toString("utf-8");
   }
 
-  static listRecursivelyFilesInFolder(folder: string): Thenable<vscode.Uri[]> {
+  static listFilesInFolderRec(folder: string): Thenable<vscode.Uri[]> {
     return vscode.workspace.findFiles(`${folder}/**/*.py`);
   }
 }
