@@ -9,17 +9,17 @@ import FilesUtil from "../utils/FilesUtil";
 export default class BolinetteParser {
   async run() {
     const projectFiles = [];
-    const folders = [
+    const fileTypes = [
       ProjectFileType.controllers,
       ProjectFileType.mixins,
       ProjectFileType.models,
       ProjectFileType.services,
     ];
-    for (const folder of folders) {
-      const fileUris: Uri[] = await FilesUtil.listFilesInFolderRec(folder);
+    for (const fileType of fileTypes) {
+      const fileUris: Uri[] = await FilesUtil.listFilesInFolderRec(fileType);
       for (const fileUri of fileUris) {
-        const parser = FileParserFactory.getParser(folder);
-        const projectFile = new ProjectFile(folder, fileUri.path, parser);
+        const parser = FileParserFactory.getParser(fileType);
+        const projectFile = new ProjectFile(fileType, fileUri.path, parser);
         await projectFile.updateAst();
 
         projectFiles.push(projectFile);
