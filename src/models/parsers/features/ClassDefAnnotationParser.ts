@@ -1,8 +1,8 @@
 import * as esquery from "esquery";
-import Annotation from "../models/Annotation";
+import Annotation from "../../Annotation";
 
-export default class AnnotationParser {
-  parse(ast: any, annotation: string): Annotation | null {
+export default class ClassDefAnnotationParser {
+  static parse(ast: any, annotation: string): Annotation | null {
     const astClassDefs: any[] = esquery(ast, "ClassDef");
     const astDecorator: any = astClassDefs
       .map((classDef) => classDef.decorator_list)

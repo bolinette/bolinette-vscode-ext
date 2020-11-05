@@ -1,16 +1,25 @@
+import AbstractParser from "./parsers/ParserInterface";
 import ControllerParser from "./parsers/ControllerParser";
+import MixinParser from "./parsers/MixinParser";
+import ModelParser from "./parsers/ModelParser";
+import ServiceParser from "./parsers/ServiceParser";
 
 export default abstract class FileParserFactory {
+  static controllerParser = new ControllerParser();
+  static mixinParser = new MixinParser();
+  static modelParser = new ModelParser();
+  static serviceParser = new ServiceParser();
+
   static getParser(parserType: string) {
     switch (parserType) {
       case "controllers":
-        return ControllerParser.Instance;
+        return FileParserFactory.controllerParser;
       case "models":
-        return ControllerParser.Instance; // TODO: fix
+        return FileParserFactory.mixinParser;
       case "mixins":
-        return ControllerParser.Instance; // TODO: fix
+        return FileParserFactory.modelParser;
       case "services":
-        return ControllerParser.Instance; // TODO: fix
+        return FileParserFactory.serviceParser;
       default:
         throw new Error("Unknown parser type");
     }
