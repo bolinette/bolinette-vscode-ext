@@ -3,6 +3,7 @@ import ControllerParser from "./parsers/ControllerParser";
 import MixinParser from "./parsers/MixinParser";
 import ModelParser from "./parsers/ModelParser";
 import ServiceParser from "./parsers/ServiceParser";
+import { ProjectFileType } from "./ProjectFileType";
 
 export default abstract class FileParserFactory {
   static controllerParser = new ControllerParser();
@@ -12,13 +13,13 @@ export default abstract class FileParserFactory {
 
   static getParser(parserType: string) {
     switch (parserType) {
-      case "controllers":
+      case ProjectFileType.controllers:
         return FileParserFactory.controllerParser;
-      case "models":
+      case ProjectFileType.mixins:
         return FileParserFactory.mixinParser;
-      case "mixins":
+      case ProjectFileType.models:
         return FileParserFactory.modelParser;
-      case "services":
+      case ProjectFileType.services:
         return FileParserFactory.serviceParser;
       default:
         throw new Error("Unknown parser type");
