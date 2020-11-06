@@ -7,10 +7,10 @@ export default class Project {
     this.projectFiles = projectFiles;
   }
 
-  listClassDefAnnotations(fileType: string) {
-    return this.listProjectFilesByType(fileType)
-      .map((file) => file.getParsedData("classDefAnnotation"))
-      .filter((element) => !!element);
+  listParsedData(fileType: string) {
+    return this.listProjectFilesByType(fileType).map((file) =>
+      file.getParsedData()
+    );
   }
 
   private listProjectFilesByType(type: string): ProjectFile[] {

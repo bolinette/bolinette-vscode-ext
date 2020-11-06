@@ -1,3 +1,4 @@
+import { ControllerParsedData } from "parsed-data";
 import { Uri } from "vscode";
 import Annotation from "../models/Annotation";
 import FileParserFactory from "../models/FileParserFactory";
@@ -28,9 +29,10 @@ export default class BolinetteParser {
     const project = new Project(projectFiles);
     console.log(project);
 
-    const controllersClassDefsAnnotation = project.listClassDefAnnotations(
+    const controllersParsedData = project.listParsedData(
       ProjectFileType.controllers
-    ) as Annotation[];
-    controllersClassDefsAnnotation.forEach((a) => console.log(a.toString()));
+    ) as ControllerParsedData[];
+
+    controllersParsedData.forEach((a) => console.log(a));
   }
 }

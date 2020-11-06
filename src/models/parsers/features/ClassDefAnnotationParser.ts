@@ -3,7 +3,7 @@ import * as esquery from "esquery";
 import Annotation from "../../Annotation";
 
 export default class ClassDefAnnotationParser {
-  static parse(ast: any, annotation: string): Annotation | null {
+  static parse(ast: any, annotation: string): Annotation | undefined {
     const astClassDefs = esquery(ast, "ClassDef") as ClassDef[];
     const astDecorator = astClassDefs
       .map((classDef) => classDef.decorator_list)
@@ -11,7 +11,7 @@ export default class ClassDefAnnotationParser {
       .find((decorator: Decorator) => decorator.func?.id === annotation);
 
     if (!astDecorator) {
-      return null;
+      return undefined;
     }
 
     return new Annotation(astDecorator);

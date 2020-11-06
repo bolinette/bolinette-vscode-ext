@@ -26,7 +26,7 @@ export default class ProjectFile {
     return this.type;
   }
 
-  getParsedData(elementName: string) {
-    return this.parsedData[elementName];
+  getParsedData() {
+    return this.parsedData;
   }
 }
