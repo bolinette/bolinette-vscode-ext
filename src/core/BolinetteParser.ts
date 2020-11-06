@@ -31,11 +31,6 @@ export default class BolinetteParser {
     const controllersClassDefsAnnotation = project.listClassDefAnnotations(
       ProjectFileType.controllers
     ) as Annotation[];
-    console.log(
-      controllersClassDefsAnnotation.map(
-        (annotation) =>
-          `@${annotation.getAnnotationName()}(${annotation.getFirstParameter()})`
-      )
-    );
+    controllersClassDefsAnnotation.forEach((a) => console.log(a.toString()));
   }
 }

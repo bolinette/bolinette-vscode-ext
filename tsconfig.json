@@ -6,6 +6,8 @@
     "lib": ["es6", "es2019"],
     "sourceMap": true,
     "rootDir": "src",
+    "baseUrl": "./",
+    "paths": { "*": ["src/types/*"] },
     "strict": true /* enable all strict type-checking options */
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
