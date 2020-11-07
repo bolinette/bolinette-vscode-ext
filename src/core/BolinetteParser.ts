@@ -19,6 +19,9 @@ export default class BolinetteParser {
     for (const fileType of fileTypes) {
       const fileUris: Uri[] = await FilesUtil.listFilesInFolderRec(fileType);
       for (const fileUri of fileUris) {
+        if (FilesUtil.isFileSupported(fileUri.path)) {
+          continue;
+        }
         const projectFile = new ProjectFile(fileUri.path);
         await projectFile.updateAst();
         projectFiles.push(projectFile);
@@ -35,20 +38,24 @@ export default class BolinetteParser {
   }
 
   async addProjectFile(filePath: string) {
+    console.log(`Adding file: ${filePath}`);
     const projectFile = new ProjectFile(filePath);
     await projectFile.updateAst();
     this.project?.addProjectFile(projectFile);
   }
 
   async updateProjectFile(filePath: string) {
+    console.log(`Updating file: ${filePath}`);
     return this.project?.getProjectFile(filePath)?.updateAst();
   }
 
   updateProjectFilePath(oldPath: string, newPath: string) {
+    console.log(`Renaming file: ${oldPath}`);
     this.project?.updateProjectFilePath(oldPath, newPath);
   }
 
   removeProjectFile(filePath: string) {
+    console.log(`Removing file: ${filePath}`);
     this.project?.removeProjectFile(filePath);
   }
 }

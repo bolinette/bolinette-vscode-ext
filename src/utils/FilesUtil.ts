@@ -12,9 +12,29 @@ export default abstract class FilesUtil {
     return vscode.workspace.findFiles(`${folder}/**/*.py`);
   }
 
-  static getFileType(filePath: string) {
+  static getRootBasedFilePath(filePath: string) {
     const workspacePath = `${vscode.workspace.workspaceFolders?.[0]?.uri.path}/`;
-    const substrWorkspacePath = filePath.substr(workspacePath.length);
-    return substrWorkspacePath.split(/(\/|\\)/)[0];
+    return filePath.substr(workspacePath.length);
+  }
+
+  static getFileType(filePath: string) {
+    return FilesUtil.getRootBasedFilePath(filePath).split(/(\/|\\)/)[0];
+  }
+
+  static isFileSupported(filePath: string) {
+    if (filePath.indexOf(".") === -1) {
+      return false;
+    }
+    if (filePath.substr(filePath.lastIndexOf(".")) !== ".py") {
+      return false;
+    }
+    const rootBasedFilePath = FilesUtil.getRootBasedFilePath(filePath);
+    if (
+      rootBasedFilePath.indexOf("/") === -1 &&
+      rootBasedFilePath.indexOf("\\") === -1
+    ) {
+      return false;
+    }
+    return true;
   }
 }
