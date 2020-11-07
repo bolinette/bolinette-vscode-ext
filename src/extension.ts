@@ -3,6 +3,7 @@ import BolinetteChecker from "./utils/BolinetteChecker";
 import AstGenerator from "./utils/AstGenerator";
 import BolinetteParser from "./core/BolinetteParser";
 
+let activeTextEditor: vscode.TextEditor | undefined;
 export async function activate(context: vscode.ExtensionContext) {
   AstGenerator.init(context);
   const isBolinetteApp = await BolinetteChecker.isBolinetteApp();
@@ -28,6 +29,15 @@ export async function activate(context: vscode.ExtensionContext) {
     e.files.forEach((file) => {
       parser.removeProjectFile(file.path);
     });
+  });
+
+  activeTextEditor = vscode.window.activeTextEditor;
+  vscode.window.onDidChangeActiveTextEditor((e) => {
+    if (activeTextEditor?.document.isDirty) {
+      const lastViewedFilePath = activeTextEditor.document.uri.path;
+      parser.updateProjectFile(lastViewedFilePath);
+    }
+    activeTextEditor = e;
   });
 }
 
