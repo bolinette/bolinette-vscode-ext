@@ -26,12 +26,12 @@ export default class Project {
   }
 
   listParsedData(fileType: string) {
-    return this.listProjectFilesByType(fileType).map((file) =>
+    return this.getProjectFilesByType(fileType).map((file) =>
       file.getParsedData()
     );
   }
 
-  private listProjectFilesByType(type: string): ProjectFile[] {
+  getProjectFilesByType(type: string): ProjectFile[] {
     return this.projectFiles.filter((file) => file.getType() === type);
   }
 }

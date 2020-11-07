@@ -34,6 +34,10 @@ export default class BolinetteParser {
     return this;
   }
 
+  getProject() {
+    return this.project;
+  }
+
   async addProjectFile(filePath: string) {
     console.log(`Adding file: ${filePath}`);
     const projectFile = new ProjectFile(filePath);

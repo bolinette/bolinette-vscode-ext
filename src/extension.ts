@@ -3,6 +3,7 @@ import BolinetteChecker from "./utils/BolinetteChecker";
 import AstGenerator from "./utils/AstGenerator";
 import BolinetteParser from "./core/BolinetteParser";
 import FilesUtil from "./utils/FilesUtil";
+import { BolinetteAutocomplete } from "./core/BolinetteAutocomplete";
 
 let activeTextEditor: vscode.TextEditor | undefined;
 export async function activate(context: vscode.ExtensionContext) {
@@ -57,6 +58,8 @@ export async function activate(context: vscode.ExtensionContext) {
     }
     activeTextEditor = e;
   });
+
+  new BolinetteAutocomplete(parser.getProject()).registerAutocomplete();
 }
 
 export function deactivate() {}
