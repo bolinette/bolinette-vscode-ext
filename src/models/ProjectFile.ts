@@ -1,5 +1,6 @@
 import AstGenerator from "../utils/AstGenerator";
 import FilesUtil from "../utils/FilesUtil";
+import FileParserFactory from "./FileParserFactory";
 import AbstractParser from "./parsers/ParserInterface";
 
 export default class ProjectFile {
@@ -10,10 +11,10 @@ export default class ProjectFile {
 
   private fileParser: AbstractParser;
 
-  constructor(type: string, filePath: string, fileParser: AbstractParser) {
-    this.type = type;
-    this.fileParser = fileParser;
+  constructor(filePath: string) {
     this.filePath = filePath;
+    this.type = FilesUtil.getFileType(this.filePath);
+    this.fileParser = FileParserFactory.getParser(this.type);
   }
 
   async updateAst() {
@@ -28,5 +29,17 @@ export default class ProjectFile {
 
   getParsedData() {
     return this.parsedData;
+  }
+
+  getPath() {
+    return this.filePath;
+  }
+
+  setPath(path: string) {
+    this.filePath = path;
+  }
+
+  getAst() {
+    return this.ast;
   }
 }

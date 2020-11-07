@@ -11,4 +11,10 @@ export default abstract class FilesUtil {
   static listFilesInFolderRec(folder: string): Thenable<vscode.Uri[]> {
     return vscode.workspace.findFiles(`${folder}/**/*.py`);
   }
+
+  static getFileType(filePath: string) {
+    const workspacePath = `${vscode.workspace.workspaceFolders?.[0]?.uri.path}/`;
+    const substrWorkspacePath = filePath.substr(workspacePath.length);
+    return substrWorkspacePath.split(/(\/|\\)/)[0];
+  }
 }
