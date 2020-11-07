@@ -20,6 +20,9 @@ export default abstract class AstGenerator {
           .replace(/ast_type/g, "type");
         resolve(JSON.parse(astAsString));
       });
+      pyProg.stderr.on("data", () => {
+        resolve(null);
+      });
     });
   }
 }

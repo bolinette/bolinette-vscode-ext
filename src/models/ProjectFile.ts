@@ -20,7 +20,11 @@ export default class ProjectFile {
   async updateAst() {
     const fileContent = await FilesUtil.readFile(this.filePath);
     this.ast = await AstGenerator.parseCode(fileContent);
-    this.parsedData = this.fileParser.parse(this.ast);
+    if (this.ast) {
+      this.parsedData = this.fileParser.parse(this.ast);
+    } else {
+      this.parsedData = null;
+    }
   }
 
   getType(): string {

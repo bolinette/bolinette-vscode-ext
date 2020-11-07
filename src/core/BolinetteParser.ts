@@ -19,9 +19,6 @@ export default class BolinetteParser {
     for (const fileType of fileTypes) {
       const fileUris: Uri[] = await FilesUtil.listFilesInFolderRec(fileType);
       for (const fileUri of fileUris) {
-        if (FilesUtil.isFileSupported(fileUri.path)) {
-          continue;
-        }
         const projectFile = new ProjectFile(fileUri.path);
         await projectFile.updateAst();
         projectFiles.push(projectFile);
