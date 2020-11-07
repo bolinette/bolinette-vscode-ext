@@ -53,7 +53,10 @@ export async function activate(context: vscode.ExtensionContext) {
     if (activeTextEditor?.document.isDirty) {
       const lastViewedFilePath = activeTextEditor.document.uri.path;
       if (FilesUtil.isFileSupported(lastViewedFilePath)) {
-        parser.updateProjectFile(lastViewedFilePath);
+        parser.updateProjectFile(
+          lastViewedFilePath,
+          activeTextEditor.document.getText()
+        );
       }
     }
     activeTextEditor = e;

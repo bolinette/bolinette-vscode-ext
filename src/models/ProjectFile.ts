@@ -17,8 +17,13 @@ export default class ProjectFile {
     this.fileParser = FileParserFactory.getParser(this.type);
   }
 
-  async updateAst() {
-    const fileContent = await FilesUtil.readFile(this.filePath);
+  async updateAst(dirtyContent?: string) {
+    let fileContent;
+    if (!dirtyContent) {
+      fileContent = await FilesUtil.readFile(this.filePath);
+    } else {
+      fileContent = dirtyContent;
+    }
     this.ast = await AstGenerator.parseCode(fileContent);
     if (this.ast) {
       this.parsedData = this.fileParser.parse(this.ast);

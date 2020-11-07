@@ -45,9 +45,9 @@ export default class BolinetteParser {
     this.project?.addProjectFile(projectFile);
   }
 
-  async updateProjectFile(filePath: string) {
+  async updateProjectFile(filePath: string, dirtyFileContent?: string) {
     console.log(`Updating file: ${filePath}`);
-    return this.project?.getProjectFile(filePath)?.updateAst();
+    return this.project?.getProjectFile(filePath)?.updateAst(dirtyFileContent);
   }
 
   updateProjectFilePath(oldPath: string, newPath: string) {
