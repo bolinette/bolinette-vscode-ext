@@ -1,6 +1,6 @@
 import { ClassDef, Decorator } from "ext-estree";
 import * as esquery from "esquery";
-import Annotation from "../../Annotation";
+import Annotation from "../../models/Annotation";
 
 export default class ClassDefAnnotationParser {
   static parse(ast: any, annotation: string): Annotation | undefined {

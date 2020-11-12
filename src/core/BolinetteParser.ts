@@ -2,7 +2,7 @@ import { ControllerParsedData } from "parsed-data";
 import { Uri } from "vscode";
 import Project from "../models/Project";
 import ProjectFile from "../models/ProjectFile";
-import { ProjectFileType } from "../models/ProjectFileType";
+import { ProjectFileType } from "../enums/ProjectFileType";
 import FilesUtil from "../utils/FilesUtil";
 
 export default class BolinetteParser {

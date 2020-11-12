@@ -1,4 +1,4 @@
-import Annotation from "../../../models/Annotation";
+import Annotation from "../../models/Annotation";
 
 export default class AssociatedModelFinder {
   static parse(annotation: Annotation | undefined) {
