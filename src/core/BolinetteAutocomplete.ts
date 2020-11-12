@@ -76,6 +76,42 @@ export class BolinetteAutocomplete {
             );
           }
 
+          const returnOrExpectArg1Regex = /(returns|expects)=\('$/;
+          if (returnOrExpectArg1Regex.test(linePrefix)) {
+            const models = this.project.getProjectFilesByType("models");
+            const parsedData = models.map((model) =>
+              model.getParsedData()
+            ) as ModelParsedData[];
+            return parsedData.map(
+              (el) =>
+                new vscode.CompletionItem(
+                  el.classDefAnnotation?.getFirstParameter() || "",
+                  vscode.CompletionItemKind.Field
+                )
+            );
+          }
+
+          const returnArg2Regex = /returns=\('(?<modelName>[^']+)', ?'$/;
+          const returnArg2RegexResult = returnArg2Regex.exec(linePrefix);
+          if (returnArg2RegexResult) {
+            const modelName = returnArg2RegexResult.groups?.modelName;
+            if (!modelName) {
+              return [];
+            }
+            const model = this.project.findModelByName(modelName);
+            if (!model) {
+              return [];
+            }
+            const parsedData = model.getParsedData() as ModelParsedData;
+            return parsedData.responses.map(
+              (response) =>
+                new vscode.CompletionItem(
+                  response,
+                  vscode.CompletionItemKind.Field
+                )
+            );
+          }
+
           return [];
         },
       }
