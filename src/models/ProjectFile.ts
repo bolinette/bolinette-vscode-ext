@@ -1,7 +1,7 @@
 import AstGenerator from "../utils/AstGenerator";
 import FilesUtil from "../utils/FilesUtil";
 import FileParserFactory from "../utils/FileParserFactory";
-import AbstractParser from "../parsers/ParserInterface";
+import AbstractParser from "../data/ParserInterface";
 
 export default class ProjectFile {
   private type: string;

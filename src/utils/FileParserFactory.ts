@@ -1,8 +1,7 @@
-import AbstractParser from "../parsers/ParserInterface";
-import ControllerParser from "../parsers/ControllerParser";
-import MixinParser from "../parsers/MixinParser";
-import ModelParser from "../parsers/ModelParser";
-import ServiceParser from "../parsers/ServiceParser";
+import ControllerParser from "../data/parsers/ControllerParser";
+import MixinParser from "../data/parsers/MixinParser";
+import ModelParser from "../data/parsers/ModelParser";
+import ServiceParser from "../data/parsers/ServiceParser";
 import { ProjectFileType } from "../enums/ProjectFileType";
 
 export default abstract class FileParserFactory {
