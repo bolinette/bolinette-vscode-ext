@@ -12,6 +12,7 @@ export interface MixinParsedData extends ParsedData {}
 
 export interface ModelParsedData extends ParsedData {
   responses: string[];
+  payloads: string[];
 }
 
 export interface ServiceParsedData extends ParsedData {}

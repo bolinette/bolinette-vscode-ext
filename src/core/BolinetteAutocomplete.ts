@@ -112,6 +112,26 @@ export class BolinetteAutocomplete {
             );
           }
 
+          const expectArg2Regex = /expects=\('(?<modelName>[^']+)', ?'$/;
+          const expectArg2RegexResult = expectArg2Regex.exec(linePrefix);
+          if (expectArg2RegexResult) {
+            const modelName = expectArg2RegexResult.groups?.modelName;
+            if (!modelName) {
+              return [];
+            }
+            const model = this.project.findModelByName(modelName);
+            if (!model) {
+              return [];
+            }
+            const parsedData = model.getParsedData() as ModelParsedData;
+            return parsedData.payloads.map(
+              (payload) =>
+                new vscode.CompletionItem(
+                  payload,
+                  vscode.CompletionItemKind.Field
+                )
+            );
+          }
           return [];
         },
       }
