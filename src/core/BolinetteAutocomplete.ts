@@ -31,7 +31,7 @@ export class BolinetteAutocomplete {
             return [];
           }
 
-          const contextRegex = /context\.(?<type>(controller|mixin|model|service))\('/.exec(
+          const contextRegex = /context\.(?<type>(controller|mixin|model|service))\('$/.exec(
             linePrefix
           );
           if (contextRegex) {
