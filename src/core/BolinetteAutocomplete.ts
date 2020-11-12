@@ -54,10 +54,7 @@ export class BolinetteAutocomplete {
           const routeRegex = /self\.defaults\.(get_all|get_one|create|update|patch|delete)\('$/;
           if (routeRegex.test(linePrefix)) {
             const currentFile = this.project.getProjectFile(document.uri.path);
-            if (!currentFile) {
-              return [];
-            }
-            if (currentFile.getType() !== "controllers") {
+            if (!currentFile || currentFile.getType() !== "controllers") {
               return [];
             }
             const parsedData = currentFile.getParsedData() as ControllerParsedData;
