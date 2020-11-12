@@ -20,6 +20,15 @@ export type Keyword = {
   value: Argument;
 };
 
+export type TupleElement = {
+  type: string,
+  s?: string
+}
+
 export type ClassDef = import("estree").Node & {
   decorator_list: Decorator[];
+};
+
+export type Tuple = import("estree").Node & {
+  elts: TupleElement[];
 };

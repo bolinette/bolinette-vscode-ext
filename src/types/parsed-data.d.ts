@@ -8,6 +8,8 @@ export interface ControllerParsedData extends ParsedData {}
 
 export interface MixinParsedData extends ParsedData {}
 
-export interface ModelParsedData extends ParsedData {}
+export interface ModelParsedData extends ParsedData {
+  responses: string[]
+}
 
 export interface ServiceParsedData extends ParsedData {}

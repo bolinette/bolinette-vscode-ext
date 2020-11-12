@@ -25,12 +25,6 @@ export default class BolinetteParser {
       }
     }
     this.project = new Project(projectFiles);
-
-    const controllersParsedData = this.project.listParsedData(
-      ProjectFileType.controllers
-    ) as ControllerParsedData[];
-
-    // controllersParsedData.forEach((a) => console.log(a));
     return this;
   }
 
