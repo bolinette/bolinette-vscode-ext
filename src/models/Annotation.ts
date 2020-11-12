@@ -19,9 +19,13 @@ export default class Annotation {
     return this.getArgumentValue(this.ast.args[0]);
   }
 
-  private getArgumentValue(parameter: Argument) {
+  getParameterByName(parameterName: string) {
+    return this.ast.keywords.find((k) => k.arg === parameterName);
+  }
+
+  getArgumentValue(parameter: Argument) {
     if (!parameter) {
-      return null;
+      return undefined;
     }
     return parameter.type === "Str" ? parameter.s : parameter.value;
   }

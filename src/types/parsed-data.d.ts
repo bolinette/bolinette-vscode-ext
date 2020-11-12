@@ -4,12 +4,14 @@ export interface ParsedData {
   classDefAnnotation?: Annotation;
 }
 
-export interface ControllerParsedData extends ParsedData {}
+export interface ControllerParsedData extends ParsedData {
+  associatedModelName?: string;
+}
 
 export interface MixinParsedData extends ParsedData {}
 
 export interface ModelParsedData extends ParsedData {
-  responses: string[]
+  responses: string[];
 }
 
 export interface ServiceParsedData extends ParsedData {}

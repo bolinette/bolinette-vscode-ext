@@ -1,3 +1,4 @@
+import { ModelParsedData } from "parsed-data";
 import ProjectFile from "./ProjectFile";
 
 export default class Project {
@@ -33,5 +34,13 @@ export default class Project {
 
   getProjectFilesByType(type: string): ProjectFile[] {
     return this.projectFiles.filter((file) => file.getType() === type);
+  }
+
+  findModelByName(modelName: string) {
+    return this.getProjectFilesByType("models").find(
+      (model) =>
+        (model.getParsedData() as ModelParsedData).classDefAnnotation?.getFirstParameter() ===
+        modelName
+    );
   }
 }
