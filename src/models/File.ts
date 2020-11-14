@@ -2,15 +2,17 @@ import AstGenerator from "../utils/AstGenerator";
 import FilesUtil from "../utils/FilesUtil";
 import Parser from "../data/Parser";
 import { ParsedData } from "parsed-data";
+import { Node } from "estree";
 
 export default abstract class File {
   protected filePath: string;
   protected parser: Parser;
-  protected ast: any;
+  protected ast: Node | null;
 
   constructor(filePath: string, parser: Parser) {
     this.filePath = filePath;
     this.parser = parser;
+    this.ast = null;
   }
 
   getPath() {
@@ -32,7 +34,7 @@ export default abstract class File {
     this.parse(this.ast);
   }
 
-  abstract parse(ast: any): void;
+  abstract parse(ast: Node | null): void;
 
   abstract getParsedData(): ParsedData | null;
 }

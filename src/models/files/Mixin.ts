@@ -1,6 +1,7 @@
 import { MixinParsedData } from "parsed-data";
 import MixinParser from "../../data/parsers/MixinParser";
 import File from "../File";
+import { Node } from "estree";
 
 export default class Mixin extends File {
   private parsedData: MixinParsedData | null;
@@ -10,7 +11,7 @@ export default class Mixin extends File {
     this.parsedData = null;
   }
 
-  parse(ast: any): void {
+  parse(ast: Node | null): void {
     if (ast) {
       this.parsedData = this.parser.parse(ast) as MixinParsedData;
     } else {

@@ -1,6 +1,7 @@
 import { ControllerParsedData, ParsedData } from "parsed-data";
 import ControllerParser from "../../data/parsers/ControllerParser";
 import File from "../File";
+import { Node } from "estree";
 
 export default class Controller extends File {
   private parsedData: ControllerParsedData | null;
@@ -10,7 +11,7 @@ export default class Controller extends File {
     this.parsedData = null;
   }
 
-  parse(ast: any): void {
+  parse(ast: Node | null): void {
     if (ast) {
       this.parsedData = this.parser.parse(ast) as ControllerParsedData;
     } else {

@@ -4,9 +4,10 @@ import ClassParser from "../features/ClassParser";
 import { PayloadParser } from "../features/classes/PayloadParser";
 import { ResponseParser } from "../features/classes/ResponseParser";
 import Parser from "../Parser";
+import { Node } from "estree";
 
 export default class ModelParser implements Parser {
-  parse(ast: any): ModelParsedData {
+  parse(ast: Node): ModelParsedData {
     const classDefs = ClassParser.parse(ast);
     return {
       classes: classDefs.map((def) => ({

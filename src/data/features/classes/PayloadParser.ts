@@ -1,10 +1,10 @@
 import * as esquery from "esquery";
-import { Tuple } from "ext-estree";
+import { ClassDef, Tuple } from "ext-estree";
 
 export class PayloadParser {
-  static parse(ast: any): string[] {
+  static parse(node: ClassDef): string[] {
     const tuples = esquery(
-      ast,
+      node,
       'FunctionDef[name="payloads"] Yield Tuple'
     ) as Tuple[];
     return tuples

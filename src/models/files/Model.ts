@@ -1,6 +1,7 @@
 import { ModelParsedData } from "parsed-data";
 import ModelParser from "../../data/parsers/ModelParser";
 import File from "../File";
+import { Node } from "estree";
 
 export default class Model extends File {
   private parsedData: ModelParsedData | null;
@@ -10,7 +11,7 @@ export default class Model extends File {
     this.parsedData = null;
   }
 
-  parse(ast: any): void {
+  parse(ast: Node | null): void {
     if (ast) {
       this.parsedData = this.parser.parse(ast) as ModelParsedData;
     } else {

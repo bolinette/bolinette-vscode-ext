@@ -13,7 +13,11 @@ export default abstract class BolinetteChecker {
     }
 
     const fileContent: string = await FilesUtil.readFile(matchingFiles[0].path);
-    const ast: any = await AstGenerator.parseCode(fileContent);
+    const ast = await AstGenerator.parseCode(fileContent);
+    if (!ast) {
+      return false;
+    }
+
     return esquery(ast, 'ImportFrom[module="bolinette"]').length > 0;
   }
 }
