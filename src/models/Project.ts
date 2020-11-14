@@ -113,12 +113,4 @@ export default class Project {
   getController(filePath: string) {
     return this.controllers.find((c) => c.getPath() === filePath);
   }
-
-  getModelByName(modelName: string) {
-    return this.models.find(
-      (model) =>
-        (model.getParsedData() as ModelParsedData).classDefAnnotation?.getFirstParameter() ===
-        modelName
-    );
-  }
 }

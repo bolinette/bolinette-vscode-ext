@@ -1,6 +1,6 @@
 import { ClassDef, Decorator } from "ext-estree";
 import * as esquery from "esquery";
-import Annotation from "../../models/Annotation";
+import Annotation from "../../../models/Annotation";
 
 export default class ClassDefAnnotationParser {
   static parse(ast: any, annotation: string): Annotation | undefined {
@@ -9,6 +9,8 @@ export default class ClassDefAnnotationParser {
       .map((classDef) => classDef.decorator_list)
       .flat()
       .find((decorator: Decorator) => decorator.func?.id === annotation);
+
+    astClassDefs;
 
     if (!astDecorator) {
       return undefined;

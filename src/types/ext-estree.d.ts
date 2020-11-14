@@ -28,6 +28,8 @@ export type TupleElement = {
 
 export type ClassDef = import("estree").Node & {
   decorator_list: Decorator[];
+  lineno: number;
+  end_lineno: number;
 };
 
 export type Tuple = import("estree").Node & {

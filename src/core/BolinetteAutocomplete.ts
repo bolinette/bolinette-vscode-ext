@@ -49,13 +49,16 @@ export class BolinetteAutocomplete {
               file.getParsedData()
             ) as ParsedData[];
             return (
-              parsedData.map(
-                (el) =>
-                  new vscode.CompletionItem(
-                    el.classDefAnnotation?.getFirstParameter() || "",
-                    vscode.CompletionItemKind.Field
-                  )
-              ) || []
+              parsedData
+                .map((el) => el.classes)
+                .flat()
+                .map(
+                  (el) =>
+                    new vscode.CompletionItem(
+                      el.classDefAnnotation?.getFirstParameter() || "",
+                      vscode.CompletionItemKind.Field
+                    )
+                ) || []
             );
           }
 
@@ -69,15 +72,29 @@ export class BolinetteAutocomplete {
             if (!parsedData) {
               return [];
             }
-            const modelName = parsedData.associatedModelName;
+            const matchingClass = parsedData.classes.find(
+              (c) =>
+                c.classDefAst.lineno <= position.line + 1 &&
+                c.classDefAst.end_lineno + 1 >= position.line + 1
+            );
+            if (!matchingClass) {
+              return [];
+            }
+            const modelName = matchingClass.associatedModelName;
             if (!modelName) {
               return [];
             }
-            const model = this.project.getModelByName(modelName);
+            const model = this.project
+              .getModels()
+              .find((model) => model.hasName(modelName));
             if (!model) {
               return [];
             }
-            const modelParsedData = model.getParsedData();
+            const modelParsedData = model
+              .getParsedData()
+              ?.classes.find(
+                (c) => c.classDefAnnotation?.getFirstParameter() === modelName
+              );
             if (!modelParsedData) {
               return [];
             }
@@ -93,16 +110,19 @@ export class BolinetteAutocomplete {
           const returnOrExpectArg1Regex = /(returns|expects)=\('$/;
           if (returnOrExpectArg1Regex.test(linePrefix)) {
             const models = this.project.getModels();
-            const parsedData = models.map((model) =>
-              model.getParsedData()
-            ) as ModelParsedData[];
-            return parsedData.map(
-              (el) =>
-                new vscode.CompletionItem(
-                  el.classDefAnnotation?.getFirstParameter() || "",
-                  vscode.CompletionItemKind.Field
-                )
-            );
+            const parsedData = models
+              .map((model) => model.getParsedData())
+              .filter((model) => !!model) as ModelParsedData[];
+            return parsedData
+              .map((el) => el.classes)
+              .flat()
+              .map(
+                (el) =>
+                  new vscode.CompletionItem(
+                    el.classDefAnnotation?.getFirstParameter() || "",
+                    vscode.CompletionItemKind.Field
+                  )
+              );
           }
 
           const returnArg2Regex = /returns=\('(?<modelName>[^']+)', ?'$/;
@@ -112,12 +132,22 @@ export class BolinetteAutocomplete {
             if (!modelName) {
               return [];
             }
-            const model = this.project.getModelByName(modelName);
-            if (!model) {
+
+            const parsedData = this.project
+              .getModels()
+              .map((model) => model.getParsedData())
+              .filter((model) => !!model) as ModelParsedData[];
+            const matchingClass = parsedData
+              .map((data) => data.classes)
+              .flat()
+              .find(
+                (c) => c.classDefAnnotation?.getFirstParameter() === modelName
+              );
+
+            if (!matchingClass) {
               return [];
             }
-            const parsedData = model.getParsedData() as ModelParsedData;
-            return parsedData.responses.map(
+            return matchingClass.responses.map(
               (response) =>
                 new vscode.CompletionItem(
                   response,
@@ -133,15 +163,25 @@ export class BolinetteAutocomplete {
             if (!modelName) {
               return [];
             }
-            const model = this.project.getModelByName(modelName);
-            if (!model) {
+
+            const parsedData = this.project
+              .getModels()
+              .map((model) => model.getParsedData())
+              .filter((model) => !!model) as ModelParsedData[];
+            const matchingClass = parsedData
+              .map((data) => data.classes)
+              .flat()
+              .find(
+                (c) => c.classDefAnnotation?.getFirstParameter() === modelName
+              );
+
+            if (!matchingClass) {
               return [];
             }
-            const parsedData = model.getParsedData() as ModelParsedData;
-            return parsedData.payloads.map(
-              (payload) =>
+            return matchingClass.payloads.map(
+              (response) =>
                 new vscode.CompletionItem(
-                  payload,
+                  response,
                   vscode.CompletionItemKind.Field
                 )
             );

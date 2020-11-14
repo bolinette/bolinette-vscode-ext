@@ -1,17 +1,21 @@
 import { ControllerParsedData } from "parsed-data";
-import AssociatedModelFinder from "../features/AssociatedModelFinder";
-import ClassDefAnnotationParser from "../features/ClassDefAnnotationParser";
+import AssociatedModelFinder from "../features/classes/AssociatedModelFinder";
+import ClassDefAnnotationParser from "../features/classes/ClassDefAnnotationParser";
+import ClassParser from "../features/ClassParser";
 import Parser from "../Parser";
 
 export default class ControllerParser implements Parser {
   parse(ast: any): ControllerParsedData {
-    const classDefAnnotation = ClassDefAnnotationParser.parse(
-      ast,
-      "controller"
-    );
+    const classDefs = ClassParser.parse(ast);
     return {
-      classDefAnnotation,
-      associatedModelName: AssociatedModelFinder.parse(classDefAnnotation),
+      classes: classDefs.map((def) => {
+        const annotation = ClassDefAnnotationParser.parse(def, "controller");
+        return {
+          classDefAst: def,
+          classDefAnnotation: annotation,
+          associatedModelName: AssociatedModelFinder.parse(annotation),
+        };
+      }),
     };
   }
 }

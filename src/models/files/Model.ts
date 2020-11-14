@@ -21,4 +21,13 @@ export default class Model extends File {
   getParsedData(): ModelParsedData | null {
     return this.parsedData;
   }
+
+  hasName(name: string) {
+    if (!this.parsedData) {
+      return false;
+    }
+    return this.parsedData.classes
+      .map((c) => c.classDefAnnotation?.getFirstParameter())
+      .includes(name);
+  }
 }
