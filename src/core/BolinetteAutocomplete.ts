@@ -1,14 +1,6 @@
 import Project from "../models/Project";
 import * as vscode from "vscode";
-import {
-  ControllerParsedData,
-  MixinParsedData,
-  ModelParsedData,
-  ParsedData,
-  ServiceParsedData,
-} from "parsed-data";
-import { parse } from "path";
-import FilesUtil from "../utils/FilesUtil";
+import { ModelParsedData, ParsedData } from "parsed-data";
 import File from "../models/File";
 
 export class BolinetteAutocomplete {
