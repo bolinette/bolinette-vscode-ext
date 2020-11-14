@@ -8,7 +8,7 @@ export class PayloadParser {
       'FunctionDef[name="payloads"] Yield Tuple'
     ) as Tuple[];
     return tuples
-      .map((tuple) => tuple.elts[0].s)
+      .map((tuple) => tuple.elts[0].s || tuple.elts[0].value)
       .filter((x) => !!x) as string[];
   }
 }

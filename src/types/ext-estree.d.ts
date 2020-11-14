@@ -21,9 +21,10 @@ export type Keyword = {
 };
 
 export type TupleElement = {
-  type: string,
-  s?: string
-}
+  type: string;
+  s?: string;
+  value?: string;
+};
 
 export type ClassDef = import("estree").Node & {
   decorator_list: Decorator[];

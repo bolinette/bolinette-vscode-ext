@@ -8,6 +8,8 @@ import {
   ServiceParsedData,
 } from "parsed-data";
 import { parse } from "path";
+import FilesUtil from "../utils/FilesUtil";
+import File from "../models/File";
 
 export class BolinetteAutocomplete {
   private project?: Project;
@@ -36,7 +38,21 @@ export class BolinetteAutocomplete {
           );
           if (contextRegex) {
             const type = `${contextRegex.groups?.type}s`;
-            const files = this.project.getProjectFilesByType(type);
+            let files: File[] = [];
+            switch (type) {
+              case "controllers":
+                files = this.project.getControllers();
+                break;
+              case "mixins":
+                files = this.project.getMixins();
+                break;
+              case "models":
+                files = this.project.getModels();
+                break;
+              case "services":
+                files = this.project.getServices();
+                break;
+            }
             const parsedData = files.map((file) =>
               file.getParsedData()
             ) as ParsedData[];
@@ -53,20 +69,26 @@ export class BolinetteAutocomplete {
 
           const routeRegex = /self\.defaults\.(get_all|get_one|create|update|patch|delete)\('$/;
           if (routeRegex.test(linePrefix)) {
-            const currentFile = this.project.getProjectFile(document.uri.path);
-            if (!currentFile || currentFile.getType() !== "controllers") {
+            const currentFile = this.project.getController(document.uri.path);
+            if (!currentFile) {
               return [];
             }
-            const parsedData = currentFile.getParsedData() as ControllerParsedData;
+            const parsedData = currentFile.getParsedData();
+            if (!parsedData) {
+              return [];
+            }
             const modelName = parsedData.associatedModelName;
             if (!modelName) {
               return [];
             }
-            const model = this.project.findModelByName(modelName);
+            const model = this.project.getModelByName(modelName);
             if (!model) {
               return [];
             }
-            const modelParsedData = model.getParsedData() as ModelParsedData;
+            const modelParsedData = model.getParsedData();
+            if (!modelParsedData) {
+              return [];
+            }
             return modelParsedData.responses.map(
               (response) =>
                 new vscode.CompletionItem(
@@ -78,7 +100,7 @@ export class BolinetteAutocomplete {
 
           const returnOrExpectArg1Regex = /(returns|expects)=\('$/;
           if (returnOrExpectArg1Regex.test(linePrefix)) {
-            const models = this.project.getProjectFilesByType("models");
+            const models = this.project.getModels();
             const parsedData = models.map((model) =>
               model.getParsedData()
             ) as ModelParsedData[];
@@ -98,7 +120,7 @@ export class BolinetteAutocomplete {
             if (!modelName) {
               return [];
             }
-            const model = this.project.findModelByName(modelName);
+            const model = this.project.getModelByName(modelName);
             if (!model) {
               return [];
             }
@@ -119,7 +141,7 @@ export class BolinetteAutocomplete {
             if (!modelName) {
               return [];
             }
-            const model = this.project.findModelByName(modelName);
+            const model = this.project.getModelByName(modelName);
             if (!model) {
               return [];
             }

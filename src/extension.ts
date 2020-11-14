@@ -13,15 +13,17 @@ export async function activate(context: vscode.ExtensionContext) {
   if (!isBolinetteApp) {
     return;
   }
-  const parser = await new BolinetteParser().run();
+
+  const project = await new BolinetteParser().run();
   console.log("Parser ready");
+
   vscode.workspace.onDidSaveTextDocument((e) => {
-    parser.updateProjectFile(e.uri.path);
+    project.updateFileAst(e.uri.path);
   });
   vscode.workspace.onDidCreateFiles((e) => {
     e.files.forEach((file) => {
       if (FilesUtil.isFileSupported(file.path)) {
-        parser.addProjectFile(file.path);
+        project.addFile(file.path);
       }
     });
   });
@@ -34,16 +36,16 @@ export async function activate(context: vscode.ExtensionContext) {
         FilesUtil.isFileSupported(file.oldUri.path) &&
         !FilesUtil.isFileSupported(file.newUri.path)
       ) {
-        parser.removeProjectFile(file.oldUri.path);
+        project.removeFile(file.oldUri.path);
         return;
       }
-      parser.updateProjectFilePath(file.oldUri.path, file.newUri.path);
+      project.updateFilePath(file.oldUri.path, file.newUri.path);
     });
   });
   vscode.workspace.onDidDeleteFiles((e) => {
     e.files.forEach((file) => {
       if (FilesUtil.isFileSupported(file.path)) {
-        parser.removeProjectFile(file.path);
+        project.removeFile(file.path);
       }
     });
   });
@@ -53,7 +55,7 @@ export async function activate(context: vscode.ExtensionContext) {
     if (activeTextEditor?.document.isDirty) {
       const lastViewedFilePath = activeTextEditor.document.uri.path;
       if (FilesUtil.isFileSupported(lastViewedFilePath)) {
-        parser.updateProjectFile(
+        project.updateFileAst(
           lastViewedFilePath,
           activeTextEditor.document.getText()
         );
@@ -62,7 +64,7 @@ export async function activate(context: vscode.ExtensionContext) {
     activeTextEditor = e;
   });
 
-  new BolinetteAutocomplete(parser.getProject()).registerAutocomplete();
+  new BolinetteAutocomplete(project).registerAutocomplete();
 }
 
 export function deactivate() {}
