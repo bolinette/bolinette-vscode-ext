@@ -18,7 +18,7 @@ export default class ExpectsSecondArg extends Completion {
     applies: boolean;
     items?: CompletionItem[];
   } {
-    const expectArg2Regex = /expects=\('(?<modelName>[^']+)', ?'$/;
+    const expectArg2Regex = /web\.Expects\('(?<modelName>[^']+)', ?'$/;
     const expectArg2RegexResult = expectArg2Regex.exec(linePrefix);
     if (!expectArg2RegexResult) {
       return { applies: false };
