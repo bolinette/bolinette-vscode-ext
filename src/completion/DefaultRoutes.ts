@@ -7,7 +7,7 @@ import {
 } from "vscode";
 import Completion from "./Completion";
 
-export default class DefaultRoutes implements Completion {
+export default class DefaultRoutes extends Completion {
   provideItems(
     linePrefix: string,
     document: TextDocument,
@@ -23,11 +23,11 @@ export default class DefaultRoutes implements Completion {
     }
     const currentFile = project.getController(document.uri.path);
     if (!currentFile) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     const parsedData = currentFile.getParsedData();
     if (!parsedData) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     const matchingClass = parsedData.classes.find(
       (c) =>
@@ -36,15 +36,15 @@ export default class DefaultRoutes implements Completion {
           c.classDefAst.end_lineno + 1 >= position.line + 1)
     );
     if (!matchingClass) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     const modelName = matchingClass.associatedModelName;
     if (!modelName) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     const model = project.getModels().find((model) => model.hasName(modelName));
     if (!model) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     const modelParsedData = model
       .getParsedData()
@@ -52,7 +52,7 @@ export default class DefaultRoutes implements Completion {
         (c) => c.classDefAnnotation?.getFirstParameter() === modelName
       );
     if (!modelParsedData) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     return {
       applies: true,

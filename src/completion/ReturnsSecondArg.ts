@@ -9,7 +9,7 @@ import Completion from "./Completion";
 import File from "../models/File";
 import { ModelParsedData, ParsedData } from "parsed-data";
 
-export default class ReturnsSecondArg implements Completion {
+export default class ReturnsSecondArg extends Completion {
   provideItems(
     linePrefix: string,
     document: TextDocument,
@@ -26,7 +26,7 @@ export default class ReturnsSecondArg implements Completion {
     }
     const modelName = returnArg2RegexResult.groups?.modelName;
     if (!modelName) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
 
     const parsedData = project
@@ -39,7 +39,7 @@ export default class ReturnsSecondArg implements Completion {
       .find((c) => c.classDefAnnotation?.getFirstParameter() === modelName);
 
     if (!matchingClass) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     return {
       applies: true,

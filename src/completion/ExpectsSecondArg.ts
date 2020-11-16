@@ -8,7 +8,7 @@ import {
 import Completion from "./Completion";
 import { ModelParsedData } from "parsed-data";
 
-export default class ExpectsSecondArg implements Completion {
+export default class ExpectsSecondArg extends Completion {
   provideItems(
     linePrefix: string,
     document: TextDocument,
@@ -25,7 +25,7 @@ export default class ExpectsSecondArg implements Completion {
     }
     const modelName = expectArg2RegexResult.groups?.modelName;
     if (!modelName) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
 
     const parsedData = project
@@ -38,7 +38,7 @@ export default class ExpectsSecondArg implements Completion {
       .find((c) => c.classDefAnnotation?.getFirstParameter() === modelName);
 
     if (!matchingClass) {
-      return { applies: true, items: [] };
+      return this.returnNoItem();
     }
     return {
       applies: true,

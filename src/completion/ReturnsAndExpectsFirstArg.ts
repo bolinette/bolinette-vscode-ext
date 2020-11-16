@@ -9,7 +9,7 @@ import Completion from "./Completion";
 import File from "../models/File";
 import { ModelParsedData, ParsedData } from "parsed-data";
 
-export default class ReturnsAndExpectsFirstArg implements Completion {
+export default class ReturnsAndExpectsFirstArg extends Completion {
   provideItems(
     linePrefix: string,
     document: TextDocument,

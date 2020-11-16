@@ -9,7 +9,7 @@ import Completion from "./Completion";
 import File from "../models/File";
 import { ParsedData } from "parsed-data";
 
-export default class FileNameListByType implements Completion {
+export default class FileNameListByType extends Completion {
   provideItems(
     linePrefix: string,
     document: TextDocument,
