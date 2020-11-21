@@ -30,7 +30,7 @@ export default class ReturnsSecondArg extends Completion {
     }
 
     const parsedData = project
-      .getModels()
+      .getFileByType("models")
       .map((model) => model.getParsedData())
       .filter((model) => !!model) as ModelParsedData[];
     const matchingClass = parsedData

@@ -1,4 +1,7 @@
 import * as vscode from "vscode";
+import * as glob from "glob";
+import * as path from "path";
+import ContextProvider from "./ContextProvider";
 
 export default abstract class FilesUtil {
   static async readFile(path: string): Promise<string> {
@@ -8,8 +11,28 @@ export default abstract class FilesUtil {
     return Buffer.from(fileContentBuffer).toString("utf-8");
   }
 
-  static listFilesInFolderRec(folder: string): Thenable<vscode.Uri[]> {
-    return vscode.workspace.findFiles(`${folder}/**/*.py`);
+  static async listFilesInWorkspace(folder: string) {
+    const files = await vscode.workspace.findFiles(`${folder}/**/*.py`);
+    return files.map((file) => file.path);
+  }
+
+  static listFilesInExtension(folder: string): Promise<string[]> {
+    const context = ContextProvider.get();
+    return new Promise((resolve, reject) => {
+      glob(
+        path.join(context.extensionPath, `defaults/${folder}/**/*.py`),
+        (err, filePaths) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(filePaths);
+        }
+      );
+    });
+  }
+
+  static isSubdirectory(parent: string, child: string) {
+    return path.relative(parent, child);
   }
 
   static getRootBasedFilePath(filePath: string) {

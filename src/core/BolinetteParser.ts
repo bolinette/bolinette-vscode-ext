@@ -1,5 +1,6 @@
-import Project from "../models/Project";
 import FilesUtil from "../utils/FilesUtil";
+import Project from "../models/Project";
+import FileFactory from "../models/FileFactory";
 
 export default class BolinetteParser {
   private project: Project;
@@ -9,17 +10,21 @@ export default class BolinetteParser {
   }
 
   async run() {
-    const promises = this.project.addFiles([
-      ...(await this.listFiles("controllers")).map((f) => f.path),
-      ...(await this.listFiles("mixins")).map((f) => f.path),
-      ...(await this.listFiles("models")).map((f) => f.path),
-      ...(await this.listFiles("services")).map((f) => f.path),
-    ]);
-    await Promise.all(promises);
-    return this.project;
-  }
+    const filePaths = [
+      ...(await FilesUtil.listFilesInWorkspace("controllers")),
+      ...(await FilesUtil.listFilesInWorkspace("mixins")),
+      ...(await FilesUtil.listFilesInWorkspace("models")),
+      ...(await FilesUtil.listFilesInWorkspace("services")),
+      // ...(await FilesUtil.listFilesInExtension("controllers")),
+      // ...(await FilesUtil.listFilesInExtension("mixins")),
+      // ...(await FilesUtil.listFilesInExtension("models")),
+      // ...(await FilesUtil.listFilesInExtension("services")),
+    ];
 
-  private listFiles(fileType: string) {
-    return FilesUtil.listFilesInFolderRec(fileType);
+    const files = FileFactory.createMany(filePaths);
+    this.project.addFiles(files);
+    await Promise.all(files.map((c) => c.updateAst()));
+
+    return this.project;
   }
 }

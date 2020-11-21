@@ -29,23 +29,7 @@ export default class FileNameListByType extends Completion {
     }
 
     const type = `${contextRegex.groups?.type}s`;
-    let files: File[] = [];
-    switch (type) {
-      case "controllers":
-        files = project.getControllers();
-        break;
-      case "mixins":
-        files = project.getMixins();
-        break;
-      case "models":
-        files = project.getModels();
-        break;
-      case "services":
-        files = project.getServices();
-        break;
-      default:
-        throw new Error(`Unhandled file type ${type}`);
-    }
+    let files = project.getFileByType(type);
 
     const parsedData = files
       .map((file) => file.getParsedData())

@@ -29,7 +29,7 @@ export default class ExpectsSecondArg extends Completion {
     }
 
     const parsedData = project
-      .getModels()
+      .getFileByType("models")
       .map((model) => model.getParsedData())
       .filter((model) => !!model) as ModelParsedData[];
     const matchingClass = parsedData

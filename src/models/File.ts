@@ -3,16 +3,29 @@ import FilesUtil from "../utils/FilesUtil";
 import Parser from "../data/Parser";
 import { ParsedData } from "parsed-data";
 import { Node } from "estree";
+import ParserFactory from "./ParserFactory";
 
-export default abstract class File {
-  protected filePath: string;
-  protected parser: Parser;
-  protected ast: Node | null;
+export default class File {
+  private type: string;
+  private parser: Parser;
+  private filePath: string
+  private ast: Node | null = null;
+  private fileContent: string | undefined;
+  private virtual: boolean = false;
+  private parsedData: ParsedData | null;
 
-  constructor(filePath: string, parser: Parser) {
+  constructor(type: string, filePath: string, fileContent?: string) {
+    this.type = type;
+    this.parser = ParserFactory.get(this.type);
     this.filePath = filePath;
-    this.parser = parser;
     this.ast = null;
+    this.parsedData = null;
+    this.fileContent = fileContent;
+    this.virtual = !!fileContent;
+  }
+
+  getType() {
+    return this.type;
   }
 
   getPath() {
@@ -26,7 +39,11 @@ export default abstract class File {
   async updateAst(dirtyContent?: string) {
     let fileContent;
     if (!dirtyContent) {
-      fileContent = await FilesUtil.readFile(this.filePath);
+      if (this.virtual) {
+        fileContent = this.fileContent || "";
+      } else {
+        fileContent = await FilesUtil.readFile(this.filePath);
+      }
     } else {
       fileContent = dirtyContent;
     }
@@ -34,7 +51,15 @@ export default abstract class File {
     this.parse(this.ast);
   }
 
-  abstract parse(ast: Node | null): void;
+  parse(ast: Node | null) {
+    if (ast) {
+      this.parsedData = this.parser.parse(ast);
+    } else {
+      this.parsedData = null;
+    }
+  }
 
-  abstract getParsedData(): ParsedData | null;
+  getParsedData() {
+    return this.parsedData;
+  }
 }

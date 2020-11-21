@@ -6,6 +6,7 @@ import {
   CompletionItemKind,
 } from "vscode";
 import Completion from "./Completion";
+import { ControllerParsedData, ModelParsedData } from "parsed-data";
 
 export default class DefaultRoutes extends Completion {
   provideItems(
@@ -21,11 +22,13 @@ export default class DefaultRoutes extends Completion {
     if (!routeRegex.test(linePrefix)) {
       return { applies: false };
     }
-    const currentFile = project.getController(document.uri.path);
+    const currentFile = project
+      .getFileByType("controllers")
+      .find((c) => c.getPath() === document.uri.path);
     if (!currentFile) {
       return this.returnNoItem();
     }
-    const parsedData = currentFile.getParsedData();
+    const parsedData = currentFile.getParsedData() as ControllerParsedData;
     if (!parsedData) {
       return this.returnNoItem();
     }
@@ -42,21 +45,29 @@ export default class DefaultRoutes extends Completion {
     if (!modelName) {
       return this.returnNoItem();
     }
-    const model = project.getModels().find((model) => model.hasName(modelName));
+    const model = project.getFileByType("models").find((model) =>
+      model
+        .getParsedData()
+        ?.classes.map((c) => c.classDefAnnotation?.getFirstParameter())
+        .includes(modelName)
+    );
     if (!model) {
       return this.returnNoItem();
     }
-    const modelParsedData = model
-      .getParsedData()
-      ?.classes.find(
-        (c) => c.classDefAnnotation?.getFirstParameter() === modelName
-      );
+    const modelParsedData = model.getParsedData() as ModelParsedData;
     if (!modelParsedData) {
+      return this.returnNoItem();
+    }
+
+    const matchingData = modelParsedData.classes.find(
+      (c) => c.classDefAnnotation?.getFirstParameter() === modelName
+    );
+    if (!matchingData) {
       return this.returnNoItem();
     }
     return {
       applies: true,
-      items: modelParsedData.responses.map(
+      items: matchingData.responses.map(
         (response) => new CompletionItem(response, CompletionItemKind.Field)
       ),
     };

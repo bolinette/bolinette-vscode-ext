@@ -1,16 +1,10 @@
 import { spawn } from "child_process";
-import * as vscode from "vscode";
 import { Node } from "estree";
+import ContextProvider from "./ContextProvider";
 
 export default abstract class AstGenerator {
-  private static context: vscode.ExtensionContext;
-
-  static init(context: vscode.ExtensionContext): void {
-    this.context = context;
-  }
-
   static async parseCode(codeAsString: string): Promise<Node | null> {
-    const pythonParserPath = AstGenerator.context.asAbsolutePath(
+    const pythonParserPath = ContextProvider.get().asAbsolutePath(
       "python-ast-parser.py"
     );
     const pyProg = await spawn("python", [pythonParserPath, codeAsString]);

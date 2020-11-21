@@ -4,10 +4,12 @@ import AstGenerator from "./utils/AstGenerator";
 import BolinetteParser from "./core/BolinetteParser";
 import FilesUtil from "./utils/FilesUtil";
 import { BolinetteAutocomplete } from "./core/BolinetteAutocomplete";
+import ContextProvider from "./utils/ContextProvider";
+import FileFactory from "./models/FileFactory";
 
 let activeTextEditor: vscode.TextEditor | undefined;
 export async function activate(context: vscode.ExtensionContext) {
-  AstGenerator.init(context);
+  ContextProvider.init(context);
   const isBolinetteApp = await BolinetteChecker.isBolinetteApp();
   console.log(`isBolinetteApp: ${isBolinetteApp}`);
   if (!isBolinetteApp) {
@@ -23,7 +25,8 @@ export async function activate(context: vscode.ExtensionContext) {
   vscode.workspace.onDidCreateFiles((e) => {
     e.files.forEach((file) => {
       if (FilesUtil.isFileSupported(file.path)) {
-        project.addFile(file.path);
+        const newFile = FileFactory.create(file.path);
+        project.addFile(newFile);
       }
     });
   });

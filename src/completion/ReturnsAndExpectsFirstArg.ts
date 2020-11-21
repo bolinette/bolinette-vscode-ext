@@ -23,7 +23,7 @@ export default class ReturnsAndExpectsFirstArg extends Completion {
     if (!returnOrExpectArg1Regex.test(linePrefix)) {
       return { applies: false };
     }
-    const models = project.getModels();
+    const models = project.getFileByType("models");
     const parsedData = models
       .map((model) => model.getParsedData())
       .filter((model) => !!model) as ModelParsedData[];
