@@ -45,9 +45,10 @@ export class BolinetteAutocomplete {
               return items;
             }
           }
-          return [];
+          return undefined;
         },
-      }
+      },
+      "'"
     );
   }
 }
