@@ -1,7 +1,5 @@
 import * as vscode from "vscode";
-import * as glob from "glob";
 import * as path from "path";
-import ContextProvider from "./ContextProvider";
 
 export default abstract class FilesUtil {
   static async readFile(path: string): Promise<string> {
@@ -12,23 +10,13 @@ export default abstract class FilesUtil {
   }
 
   static async listFilesInWorkspace(folder: string) {
-    const files = await vscode.workspace.findFiles(`${folder}/**/*.py`);
+    const files = [
+      ...(await vscode.workspace.findFiles(`*/${folder}/**/*.py`)),
+      ...(await vscode.workspace.findFiles(
+        `**/bolinette/defaults/${folder}/**/*.py`
+      )),
+    ];
     return files.map((file) => file.path);
-  }
-
-  static listFilesInExtension(folder: string): Promise<string[]> {
-    const context = ContextProvider.get();
-    return new Promise((resolve, reject) => {
-      glob(
-        path.join(context.extensionPath, `defaults/${folder}/**/*.py`),
-        (err, filePaths) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(filePaths);
-        }
-      );
-    });
   }
 
   static isSubdirectory(parent: string, child: string) {
@@ -41,7 +29,13 @@ export default abstract class FilesUtil {
   }
 
   static getFileType(filePath: string) {
-    return FilesUtil.getRootBasedFilePath(filePath).split(/(\/|\\)/)[0];
+    const path = filePath.replace(/\\/g, "/");
+    const type = /\/(?<type>(controllers|mixins|models|services))\//.exec(path)
+      ?.groups?.type;
+    if (!type) {
+      throw new Error("Unhandled file type");
+    }
+    return type;
   }
 
   static isFileSupported(filePath: string) {

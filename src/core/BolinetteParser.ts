@@ -15,10 +15,6 @@ export default class BolinetteParser {
       ...(await FilesUtil.listFilesInWorkspace("mixins")),
       ...(await FilesUtil.listFilesInWorkspace("models")),
       ...(await FilesUtil.listFilesInWorkspace("services")),
-      // ...(await FilesUtil.listFilesInExtension("controllers")),
-      // ...(await FilesUtil.listFilesInExtension("mixins")),
-      // ...(await FilesUtil.listFilesInExtension("models")),
-      // ...(await FilesUtil.listFilesInExtension("services")),
     ];
 
     const files = FileFactory.createMany(filePaths);

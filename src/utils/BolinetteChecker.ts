@@ -6,7 +6,7 @@ import AstGenerator from "./AstGenerator";
 export default abstract class BolinetteChecker {
   static async isBolinetteApp() {
     const matchingFiles: vscode.Uri[] = await vscode.workspace.findFiles(
-      "app.py"
+      "server.py"
     );
     if (matchingFiles.length === 0) {
       return false;
@@ -18,6 +18,6 @@ export default abstract class BolinetteChecker {
       return false;
     }
 
-    return esquery(ast, 'ImportFrom[module="bolinette"]').length > 0;
+    return esquery(ast, 'ImportFrom alias[name="bolinette"]').length > 0;
   }
 }
