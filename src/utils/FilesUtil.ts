@@ -23,11 +23,6 @@ export default abstract class FilesUtil {
     return path.relative(parent, child);
   }
 
-  static getRootBasedFilePath(filePath: string) {
-    const workspacePath = `${vscode.workspace.workspaceFolders?.[0]?.uri.path}/`;
-    return filePath.substr(workspacePath.length);
-  }
-
   static getFileType(filePath: string) {
     const path = filePath.replace(/\\/g, "/");
     const type = /\/(?<type>(controllers|mixins|models|services))\//.exec(path)
@@ -45,11 +40,9 @@ export default abstract class FilesUtil {
     if (filePath.substr(filePath.lastIndexOf(".")) !== ".py") {
       return false;
     }
-    const rootBasedFilePath = FilesUtil.getRootBasedFilePath(filePath);
-    if (
-      rootBasedFilePath.indexOf("/") === -1 &&
-      rootBasedFilePath.indexOf("\\") === -1
-    ) {
+    try {
+      FilesUtil.getFileType(filePath);
+    } catch {
       return false;
     }
     return true;
