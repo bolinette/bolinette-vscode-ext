@@ -1,5 +1,10 @@
 {
     "name": "vscode-bolinette",
+    "icon": "images/logo.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bolinette/vscode-bolinette"
+    },
     "displayName": "Bolinette",
     "description": "Autocompletion for Bolinette Framework",
     "version": "0.0.1",
