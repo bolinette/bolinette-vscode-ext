@@ -14,7 +14,17 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
-        "commands": []
+        "commands": [],
+        "configuration": {
+            "title": "Bolinette",
+            "properties": {
+                "bolinette.pythonCmd": {
+                    "type": "string",
+                    "markdownDescription": "Bolinette needs to run some Python scripts when activated. Please provide a path (or a command) to the Python 3 executor (default \"python\").",
+                    "default": "python"
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

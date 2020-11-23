@@ -10,7 +10,13 @@ import FileFactory from "./models/FileFactory";
 let activeTextEditor: vscode.TextEditor | undefined;
 export async function activate(context: vscode.ExtensionContext) {
   ContextProvider.init(context);
-  const isBolinetteApp = await BolinetteChecker.isBolinetteApp();
+  let isBolinetteApp;
+  try {
+    isBolinetteApp = await BolinetteChecker.isBolinetteApp();
+  } catch (e) {
+    console.error(e);
+    return;
+  }
   console.log(`isBolinetteApp: ${isBolinetteApp}`);
   if (!isBolinetteApp) {
     return;
