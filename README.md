@@ -12,7 +12,7 @@ Autocompletion features:
 
 ![self.context.[type]](images/Qd3T1sburR.gif)
 
-- Provide class name based on type in `self.context.[context|mixins|models|services]('`
+- Provide class name based on type in `self.context.[controllers|mixins|models|services]('`
 
 ![self.context.[type]](images/mqi6HMj8Lo.gif)
 
