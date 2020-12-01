@@ -19,7 +19,7 @@ export default class FileNameListByType extends Completion {
     applies: boolean;
     items?: CompletionItem[];
   } {
-    const contextRegex = /context\.(?<type>(controller|mixin|model|service))\('$/.exec(
+    const contextRegex = /context\.(?<type>(controller|mixin|model|service))\(('|")$/.exec(
       linePrefix
     );
     if (!contextRegex) {

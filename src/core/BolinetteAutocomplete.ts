@@ -48,7 +48,7 @@ export class BolinetteAutocomplete {
           return undefined;
         },
       },
-      "'"
+      ...["'", '"']
     );
   }
 }

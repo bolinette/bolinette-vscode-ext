@@ -18,7 +18,7 @@ export default class DefaultRoutes extends Completion {
     applies: boolean;
     items?: CompletionItem[];
   } {
-    const routeRegex = /self\.defaults\.(get_all|get_one|create|update|patch|delete)\('$/;
+    const routeRegex = /self\.defaults\.(get_all|get_one|create|update|patch|delete)\(('|")$/;
     if (!routeRegex.test(linePrefix)) {
       return { applies: false };
     }

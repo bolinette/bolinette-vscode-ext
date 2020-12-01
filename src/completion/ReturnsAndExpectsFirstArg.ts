@@ -19,7 +19,7 @@ export default class ReturnsAndExpectsFirstArg extends Completion {
     applies: boolean;
     items?: CompletionItem[];
   } {
-    const returnOrExpectArg1Regex = /web\.(Returns|Expects)\('$/;
+    const returnOrExpectArg1Regex = /web\.(Returns|Expects)\(('|")$/;
     if (!returnOrExpectArg1Regex.test(linePrefix)) {
       return { applies: false };
     }

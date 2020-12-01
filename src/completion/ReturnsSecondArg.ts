@@ -19,7 +19,7 @@ export default class ReturnsSecondArg extends Completion {
     applies: boolean;
     items?: CompletionItem[];
   } {
-    const returnArg2Regex = /web\.Returns\('(?<modelName>[^']+)', ?'$/;
+    const returnArg2Regex = /web\.Returns\(('|")(?<modelName>[^('|")]+)('|"), ?('|")$/;
     const returnArg2RegexResult = returnArg2Regex.exec(linePrefix);
     if (!returnArg2RegexResult) {
       return { applies: false };
